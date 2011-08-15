@@ -1,0 +1,177 @@
+<?php
+
+//
+// Compute the RNA secondary structures of an RNA sequence
+//
+
+function rnass($sequence)
+{
+	$M  = array();		// memoization
+	$i  = 0; $j = strlen($sequence);
+	$total = opt($sequence,$M,$i,$j);
+	$ss = array();
+	genRnass($sequence,$ss,$total,$M,$i,$j);
+}
+
+//
+// Print off the RNA secondary structures recursively
+//
+
+function genRnass($sequence,&$ss,&$total,$M,$i,$j)
+{
+	if($i < $j - 4)
+	{
+		// Get the optimal values of $t
+		$v = getValues($sequence,$M,$i,$j);
+		$m = max($v);
+		foreach($v as $t => $val)
+		{
+			if($val == $m)
+			{
+				$pair = "$t $j";
+
+				// Add the pair, if any
+				if($t >= 0)
+				{
+					$ss[$pair] = true;
+					$total = $total - 1;
+				}
+
+				// If that is the last one, print the solution
+				if($total == 0)
+				{
+					printSS($ss);
+				}
+
+				// Find other base pairs in this possibility
+				else
+				{
+					if($t >= 0)
+					{
+						genRnass($sequence,$ss,$total,$M,$i,$t-1);
+						genRnass($sequence,$ss,$total,$M,$t+1,$j-1);
+					}
+					else
+					{
+						genRnass($sequence,$ss,$total,$M,$i,$j-1);
+					}
+
+				}
+
+				// Remove this base pair so that we can try another possibility
+				if($t >= 0)
+				{
+					$ss[$pair] = false;
+					$total = $total + 1;
+				}
+			}
+		}
+	}
+}
+
+//
+// Computes OPT(i,j), the optimal RNA secondary structure for sequence
+// elements $i through $j for $sequence. Output the secondary structures
+//
+// OPT(i,j) = 0 if i >= j - 4
+// OPT(i,j) = max{OPT(i,j-1), max{1+OPT(i,t-1)+OPT(t+1,j-1) | st,sj are a valid base pair}} otherwise
+//
+
+function opt($sequence,&$M,$i,$j)
+{
+	if(!isset($M[$i][$j]))
+	{
+		if($i >= $j - 4)
+		{
+			$M[$i][$j] = 0;
+		}
+
+		else
+		{
+			$v = getValues($sequence,$M,$i,$j);
+			$M[$i][$j] = max($v);
+		}
+	}
+
+	return $M[$i][$j];
+}
+
+// Gets the value of each of the possibilities for adding the next base pair between i and j,
+// or not adding any at all.
+function getValues($sequence,&$M,$i,$j)
+{
+	// Compute the values
+	$v[-1] = opt($sequence,$M,$i,$j-1);					// not adding any
+	for($t = $i; $t < $j - 4; $t = $t + 1)
+	{
+		if(validBasePair(substr($sequence,$t,1),substr($sequence,$j,1)))
+		{
+			// Choose base pair t,j
+			$v[$t] = 1 + opt($sequence,$M,$i,$t-1) + opt($sequence,$M,$t+1,$j-1);
+		}
+	}
+
+	return($v);
+}
+
+//
+// The predicate such that bases $a and $b make a valid base pair.
+//
+
+function validBasePair($a,$b)
+{
+	if((($a == "G") && ($b == "C")) ||
+	   (($b == "G") && ($a == "C")) ||
+	   (($a == "A") && ($b == "U")) ||
+	   (($b == "A") && ($a == "U")))
+	{
+		return(true);
+	}
+
+	return(false);
+}
+
+// Prints the secondary structure
+function printSS($ss)
+{
+	foreach($ss as $pair => $in)
+	{
+		if($in)
+		{
+			echo "($pair) ";
+		}
+	}
+
+	echo "<br />\n";
+}
+
+//
+// Output the document, along with any responses to input sequence
+//
+
+echo "<html>\n";
+echo "<head>\n";
+echo "<title>RNASS: An RNA secondary structure computer</title>\n";
+echo "</head>\n";
+echo "<body>\n";
+echo "<h1>RNASS: An RNA secondary structure computer</h1>\n";
+echo "<p>By Carlos Torchia</p>\n";
+
+echo "<p>\n";
+echo "<i>Examples</i>: GC, GUAUAUAC, GUAUAUCA, CAGAUCGGCGAUACGAGCAUAGCAAUGCUAAGCGAGCUUAGCUGCA\n";
+echo "</p>\n";
+
+echo "<p>\n";
+echo "<form action=\"rnass.php\" method=\"get\">\n";
+echo "Sequence: <input name=\"q\" type=\"text\" />\n";
+echo "<input type=\"submit\" value=\"submit\" />\n";
+echo "</form>\n";
+echo "</p>\n";
+
+if(isset($_GET["q"]))
+{
+	rnass($_GET["q"]);
+}
+
+echo "</body>\n";
+echo "</html>\n";

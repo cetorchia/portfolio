@@ -1,0 +1,33 @@
+body
+{
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-bottom: 1em;
+	margin-top: 1em;
+	background: #ccc;
+}
+
+h1 { color: #999; font-size: 140%; }
+h2 { color: #777; font-size: 125%; }
+h3 { color: #555; font-size: 110%; }
+h1, h2, h3 { font-family: sans-serif; }
+
+.section
+{
+	margin-bottom: 10px;
+	padding: 1em;
+	display: block;
+	border: 1px solid #334;
+}
+.section, .section td
+{
+	background: #fff;
+	color: #111;
+	font-size: 14px;
+	font-family: sans-serif;
+}
+
+td
+{
+	border: 1px solid #334;
+}
