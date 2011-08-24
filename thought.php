@@ -8,19 +8,14 @@
  *
  * @author carlos
  *
- * (c) 2011 Carlos E. Torchia
+ * (c) 2011 Carlos E. Torchia (GNU Public License)
  */
 
 require_once("magic-quotes.php");
 
 // Adds a thought to the file
 
-function addThought($file, $doc, $body, $keywords) {
-  // Add meditation keyword, if checked
-  if ($meditation) {
-    $keywords .= " meditation ";
-  }
-
+function addThought($doc, $body, $keywords) {
   // Create the elements
   $thoughtElement = $doc->createElement("thought");
   $bodyElement = $doc->createElement("body", $body);
@@ -43,30 +38,68 @@ function addThought($file, $doc, $body, $keywords) {
   // Add the body and keywords elements to the tree
   $thoughtNode->appendChild($bodyElement);
   $thoughtNode->appendChild($keywordsElement);
+}
 
-  // Save what we have back to the file
-  $doc->save($file);
+// Imports thoughts from an external XML file
+function importThoughts($doc, $url) {
+  // Get XML from URL
+  $opts = array("http" => array(
+                "method"  => "GET",
+                "header"  => "User-Agent: Thinklog\r\n",
+  ));
+  $context = stream_context_create($opts);
+  $xml = file_get_contents($url, false, $context);
 
-  // Return to the thought page
-  header('Location: thought.php');
-  exit();
+  // Extract thoughts from response
+  $newDoc = new DOMDocument();
+  $newDoc->loadXML($xml);
+
+  $oldThoughts = getAllThoughts($doc, null);
+  $newThoughts = getAllThoughts($newDoc, null);
+
+  // Add each new thought
+  foreach ($newThoughts as $key => $newThought) {
+    // Check if it's not in the old thoughts
+    if (!isset($oldThoughts[$key])) {
+      addThought($doc, $newThought["body"], implode(' ', $newThought["keywords"]));
+    }
+  }  
 }
 
 // Displays the thought node list as a table
 
 function displayThoughts($doc, $filter) {
-  // Get filter keywords
-  $filter = getKeywords($filter);
+  $thoughts = getAllThoughts($doc, $filter);
 
-  // Get the thought nodes from the document
-  $thoughts = $doc->getElementsByTagName("thought");
-  if($thoughts->length == 0) {
+  if(count($thoughts) == 0) {
     noSuchThoughts($filter);
     return;
   }
 
   echo "<h2>Thoughts</h2>\n";
   echo "<table border=\"1\">\n";
+
+  foreach ($thoughts as $key => $thought) {
+    displayThought($thought["body"], $thought["keywords"]);        
+  }
+
+  echo "</table>\n";
+}
+
+// Retrieves all thoughts in a map
+function getAllThoughts($doc, $filter) {
+  $thoughtMap = array();
+
+  // Get filter keywords
+  if ($filter) {
+    $filter = getKeywords($filter);
+  }
+
+  // Get the thought nodes from the document
+  $thoughts = $doc->getElementsByTagName("thought");
+  if($thoughts->length == 0) {
+    return $thoughtMap;
+  }
 
   $length = $thoughts->length;
   for ($i = $length - 1; $i >= 0; $i = $i - 1) {
@@ -82,12 +115,12 @@ function displayThoughts($doc, $filter) {
 
       // Display the thought if it is relevant
       if(!$filter || relevant($filter, $keywords)) {
-        displayThought($body, $keywords);        
+        $thoughtMap[$body] = array("body" => $body, "keywords" => $keywords);
       }
     }
   }
 
-  echo "</table>\n";
+  return $thoughtMap;
 }
 
 // Displays a message saying there are no such thoughts
@@ -296,6 +329,17 @@ function displayFilterForm() {
   echo "</p>\n";
 }
 
+// Displays the import UI
+function displayImportForm() {
+  echo "<h2>Import thoughts...</h2>\n";
+  echo "<p>\n";
+  echo "<form method=\"GET\" action \"thought.php\">\n";
+  echo "URL (XML): <input type=\"text\" size=\"65\" name=\"url\" value=\"\" />\n";
+  echo "<input type=\"submit\" value=\"import\" />\n";
+  echo "</form>\n";
+  echo "</p>\n";
+}
+
 // Gets the filename for the thought data
 function getFilename()
 {
@@ -311,6 +355,7 @@ function getRequest()
     "body" => null,
     "keywords" => null,
     "filter" => null,
+    "url" => null,
   );
 
   if (isset($_GET["body"])) {
@@ -326,6 +371,10 @@ function getRequest()
     $request["filter"] = $_GET["filter"];
   }
 
+  if (isset($_GET["url"])) {
+    $request["url"] = $_GET["url"];
+  }
+
   return $request;
 }
 
@@ -338,9 +387,26 @@ function main() {
 
   $request = getRequest();
 
-  if($request["body"]) {
-    $keywords = array();
-    addThought($file, $doc, $request["body"], $request["keywords"]);
+  if ($request["url"]) {
+    importThoughts($doc, $request["url"]);
+
+    // Save what we have back to the file
+    $doc->save($file);
+
+    // Return to the thought page
+    header('Location: thought.php');
+    exit();
+  }
+
+  if ($request["body"]) {
+    addThought($doc, $request["body"], $request["keywords"]);
+
+    // Save what we have back to the file
+    $doc->save($file);
+
+    // Return to the thought page
+    header('Location: thought.php');
+    exit();
   }
 
   header("Content-Type: text/html");
@@ -352,9 +418,11 @@ function main() {
 
   displayThoughtForm($doc);
 
-  displayThoughts($doc, $request["filter"]);
-
   displayFilterForm();
+
+  displayImportForm();
+
+  displayThoughts($doc, $request["filter"]);
 
   echo "</body>\n";
   echo "</html>\n";
