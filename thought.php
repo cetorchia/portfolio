@@ -69,6 +69,7 @@ function importThoughts($doc, $url) {
 // Displays the thought node list as a table
 
 function displayThoughts($doc, $filter) {
+  $filter = getKeywords($filter);
   $thoughts = getAllThoughts($doc, $filter);
 
   if(count($thoughts) == 0) {
@@ -89,11 +90,6 @@ function displayThoughts($doc, $filter) {
 // Retrieves all thoughts in a map
 function getAllThoughts($doc, $filter) {
   $thoughtMap = array();
-
-  // Get filter keywords
-  if ($filter) {
-    $filter = getKeywords($filter);
-  }
 
   // Get the thought nodes from the document
   $thoughts = $doc->getElementsByTagName("thought");
