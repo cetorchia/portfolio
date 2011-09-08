@@ -78,6 +78,7 @@ function displayThoughts($doc, $filter) {
   }
 
   echo "<h2>Thoughts</h2>\n";
+  displayXMLLink();
   echo "<table border=\"1\">\n";
 
   foreach ($thoughts as $key => $thought) {
@@ -334,6 +335,12 @@ function displayImportForm() {
   echo "<input type=\"submit\" value=\"import\" />\n";
   echo "</form>\n";
   echo "</p>\n";
+}
+
+// Displays the link to the XML file
+function displayXMLLink() {
+  $file = getFilename();
+  echo "<p>Import: <a href=\"$file\">$file</a></p>";
 }
 
 // Gets the filename for the thought data
