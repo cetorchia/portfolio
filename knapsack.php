@@ -4,6 +4,10 @@
 // PTAS implementation of the 0/1 knapsack problem
 // Carlos E. Torchia, 2011-04-09
 //
+// This software is licensed under the GNU GPL v2.
+// It can be distributed freely under certain conditions; see fsf.org.
+// There is no warranty, use at your own risk.
+//
 
 //
 // Given: max weight $w, a set of $weights i => w_i, and $values i => v_i

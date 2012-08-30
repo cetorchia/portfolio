@@ -2,6 +2,11 @@
 
 //
 // Compute the RNA secondary structures of an RNA sequence
+// (c) 2011 Carlos E. Torchia
+//
+// This software is licensed under the GNU GPL v2.
+// It can be distributed freely under certain conditions; see fsf.org.
+// There is no warranty, use at your own risk.
 //
 
 function rnass($sequence)
