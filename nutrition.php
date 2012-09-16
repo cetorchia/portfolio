@@ -10,10 +10,12 @@
 //
 
 // Connect to the MySQL database
+//if(!mysql_connect("sql09.freemysql.net", "ctorchia87", "Z4r54aV"))
 if(!mysql_connect("localhost", "www-data", "ablative"))
 {
 	die("Couldn't connect to database: ".mysql_error());
 }
+//mysql_select_db("nutrition87");
 mysql_select_db("FOOD_DB");
 
 // Get the food and nutrient being queried.
@@ -57,7 +59,7 @@ function drawSearch($food, $nutrient)
 
 	$output .= "Nutrient: <input name=\"nutrient\" type=\"text\" value=\"" .
 		($nutrient ? htmlentities($nutrient) : "") .
-		"\" />\n";
+		"\" /> (e.g. \"calories\" or \"vitamin\")\n";
 
 	$output .= "</div>\n";
 
