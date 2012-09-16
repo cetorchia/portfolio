@@ -2,7 +2,7 @@
 
 //
 // Interface to FOOD_DB for nutritional information
-// (c) 2010 Carlos E. Torchia
+// (c) 2010,2012 Carlos E. Torchia
 //
 // This software is licensed under the GNU GPL v2.
 // It can be distributed freely under certain conditions; see fsf.org.
@@ -10,12 +10,10 @@
 //
 
 // Connect to the MySQL database
-//if(!mysql_connect("sql09.freemysql.net", "ctorchia87", "Z4r54aV"))
 if(!mysql_connect("localhost", "www-data", "ablative"))
 {
 	die("Couldn't connect to database: ".mysql_error());
 }
-//mysql_select_db("nutrition87");
 mysql_select_db("FOOD_DB");
 
 // Get the food and nutrient being queried.
@@ -26,7 +24,15 @@ $nutrientId = isset($_GET["nutrient_id"]) ? $_GET["nutrient_id"] : null;
 $measureId = isset($_GET["measure_id"]) ? $_GET["measure_id"] : null;
 
 // Create title and body
-$title = "Nutritional information: $food, $nutrient";
+if($food && $nutrient) {
+  $title = "Nutritional information: $nutrient in $food";
+} else if($food) {
+  $title = "Nutritional information: $food";
+} else if($nutrient) {
+  $title = "Nutritional information: $nutrient";
+} else {
+  $title = "Nutritional information";
+}
 $body = "<h1>$title</h1>\n";
 $body .= "<p><a href=\"nutrition.php\">Start over</a></p>";
 
@@ -198,12 +204,12 @@ function drawPage($title, $body)
 	echo "</head>\n";
 	echo "<body>\n";
 	echo "$body\n";
-	echo "<p>(c) 2010 Carlos E. Torchia</p>\n";
-	echo "<p>\n";
-	echo "This software is licensed under the GNU GPL v2. It can be\n";
-	echo "freely distributed under certain conditions; see <a href=\"http://www.fsf.org\">fsf.org</a>.\n";
-	echo "There is no warranty, use at your own risk.\n";
-	echo "</p>\n";
+	echo "<p>Nutritional information app (c) 2010,2012 Carlos E. Torchia ";
+        echo "(GPL2)</p>\n";
+        echo "<p>Data source: Canadian Nutrient File, Health Canada, 2010\n";
+        echo "(electronic version at ";
+        echo "<a href=\"http://www.healthcanada.gc.ca/cnf\" ";
+        echo "target=\"_blank\">www.healthcanada.gc.ca/cnf</a>)</p>\n";
 	echo "</body>\n";
 	echo "</html>\n";
 }
