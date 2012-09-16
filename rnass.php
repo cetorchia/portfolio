@@ -1,8 +1,7 @@
 <?php
 
 //
-// Compute the RNA secondary structures of an RNA sequence
-// (c) 2011 Carlos E. Torchia
+// Generates the RNA secondary structures of an RNA sequence
 //
 // This software is licensed under the GNU GPL v2.
 // It can be distributed freely under certain conditions; see fsf.org.
@@ -26,6 +25,11 @@ function rnass($sequence)
 //
 // OPT(i,j) = 0 if i >= j - 4
 // OPT(i,j) = max{OPT(i,j-1), max{1+OPT(i,t-1)+OPT(t+1,j-1) | st,sj are a valid base pair}} otherwise
+//
+// In otherwords, consider the cases where s[j] is not paired up with anybody
+// and where s[j] is paired up with some s[t]. If it is paired up with s[t],
+// then consider all the possible pairings of elements s[i] to s[t-1] with each 
+// other and all the possible pairings of elements s[t+1] to s[j-1].
 //
 
 function opt($sequence,&$M,$i,$j)
@@ -134,10 +138,10 @@ function printSS($ss)
 
 echo "<html>\n";
 echo "<head>\n";
-echo "<title>RNASS: An RNA secondary structure computer</title>\n";
+echo "<title>RNASS: An RNA secondary structure generator</title>\n";
 echo "</head>\n";
 echo "<body>\n";
-echo "<h1>RNASS: An RNA secondary structure computer</h1>\n";
+echo "<h1>RNASS: An RNA secondary structure generator</h1>\n";
 echo "<p>By Carlos Torchia</p>\n";
 
 echo "<p>\n";
