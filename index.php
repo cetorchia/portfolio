@@ -50,7 +50,7 @@ echo date('Y-m-d', getlastmod());
 <td><a href="http://web.uvic.ca/~ctorchia/chat/">Chat Room</a></td>
 <td>PHP</td>
 <td><a href="https://github.com/cetorchia/chat">chat</a></td>
-<td>ongoing</td>
+<td>May 2010 - Aug 2012</td>
 </tr>
 <tr>
 <td><a href="rnass.php">RNASS: An RNA secondary structure generator</a> (beta)</td>
