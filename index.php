@@ -6,23 +6,22 @@ require_once 'log_client.php';
 <head>
 <meta http-equiv="Expires" Content="0" />
 <link rel="StyleSheet" href="style.css" type="text/css" media="screen" />
-<title>Carlos Torchia @ UVic.ca
-</title>
+<title>Carlos Torchia's Developer/Student Portfolio</title>
 </head>
 
 <body>
 
-<h1>Carlos Torchia's UVic CSC Home page</h1>
+<h1>Carlos Torchia's Developer/Student Portfolio</h1>
 
 <img height="200" src="carlos-torchia.png" />
 <p>
 Hi, I have been a student at University of Victoria studying computer science. This page contains
-various applications and papers that I wrote while studying here. Feel free to try them or look at
-their source.
+various applications and papers that I wrote while studying here, as well as some software I've been
+developing after my graduation. Feel free to try them and look at their source.
 </p>
 <p>
 <i>
-Carlos Torchia <br />
+Carlos Torchia<br />
 <a href="http://www.linkedin.com/in/cetorchia">linkedin.com/in/cetorchia</a> <br />
 <?php
 echo date('Y-m-d', getlastmod());
@@ -48,7 +47,7 @@ echo date('Y-m-d', getlastmod());
 <td>Jan 2009</td>
 </tr>
 <tr>
-<td><a href="chat/">Chat Room</a></td>
+<td><a href="http://web.uvic.ca/~ctorchia/chat/">Chat Room</a></td>
 <td>PHP</td>
 <td><a href="https://github.com/cetorchia/chat">chat</a></td>
 <td>ongoing</td>
@@ -56,13 +55,13 @@ echo date('Y-m-d', getlastmod());
 <tr>
 <td><a href="rnass.php">RNASS: An RNA secondary structure generator</a> (beta)</td>
 <td>PHP</td>
-<td><a href="https://github.com/cetorchia/public_html/blob/master/rnass.php">rnass.php</a></td>
+<td><a href="https://github.com/cetorchia/portfolio/blob/master/rnass.php">rnass.php</a></td>
 <td>Mar 2011 </td>
 </tr>
 <tr>
 <td><a href="knapsack.php">PTAS 0/1 Knapsack solver</a></td>
 <td>PHP</td>
-<td><a href="https://github.com/cetorchia/public_html/blob/master/knapsack.php">knapsack.php</a></td>
+<td><a href="https://github.com/cetorchia/portfolio/blob/master/knapsack.php">knapsack.php</a></td>
 <td>Mar 2011</td>
 </tr>
 <tr>
@@ -87,13 +86,13 @@ echo date('Y-m-d', getlastmod());
 </tr>
 <tr>
 <td>Utility scripts for making backups, parsing files</td>
-<td>Perl, Bash, Octave</td>
+<td>Perl, Bash</td>
 <td><a href="https://github.com/cetorchia/bin">bin</a></td>
 <td>ongoing</td>
 </tr>
 <tr>
 <td>Utilities and libraries for parsing files, computing egcd etc.</td>
-<td>Perl, Octave</td>
+<td>Perl, Octave, C</td>
 <td><a href="https://github.com/cetorchia/src">src</a></td>
 <td>ongoing</td>
 </tr>
@@ -121,18 +120,18 @@ echo date('Y-m-d', getlastmod());
 <th>Date</th>
 </tr>
 <tr>
-<td><a href="fuzzy-navigation.pdf">Fuzzy logic in mobile robot navigation</a></td>
+<td><a href="papers/fuzzy-navigation.pdf">Fuzzy logic in mobile robot navigation</a></td>
 <td>Oct 2008</td>
 </tr>
 <tr>
-<td><a href="arrangements.pdf">Line arrangements</a></td>
+<td><a href="papers/arrangements.pdf">Line arrangements</a></td>
 <td>Dec 2010</td>
 </tr>
-<td><a href="flexible-info.pdf">Flexible information retrieval: harvesting the ramblings of an idle blogger</a></td>
+<td><a href="papers/flexible-info.pdf">Flexible information retrieval: harvesting the ramblings of an idle blogger</a></td>
 <td>Apr 2011</td>
 </tr>
 <tr>
-<td><a href="automatic-seq.pdf">Automatic sequences</a></td>
+<td><a href="papers/automatic-seq.pdf">Automatic sequences</a></td>
 <td>July 2012</td>
 </tr>
 </table>
