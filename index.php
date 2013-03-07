@@ -1,5 +1,5 @@
 <?php
-require_once 'log_client.php';
+require_once 'lib/log_client.php';
 ?>
 <html>
 
