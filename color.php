@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * 2015-02-14: WTF is this
+ */
+
 function getColor($dir)
 {
 	$randomPart = 24;
